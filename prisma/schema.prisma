@@ -1,0 +1,113 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// Phase 1: TikTok KOL Platform Schema
+// ============================================
+
+// User model for access control
+model User {
+  id            String   @id @default(uuid()) @db.Uuid
+  email         String   @unique @db.VarChar(255)
+  password_hash String   @db.VarChar(255)
+  role          UserRole @default(BRAND)
+  created_at    DateTime @default(now()) @db.Timestamp(6)
+  updated_at    DateTime @updatedAt @db.Timestamp(6)
+
+  // Relations
+  contact_unlocks ContactUnlock[]
+
+  @@index([email])
+  @@map("users")
+}
+
+// Agency model for talent agencies
+model Agency {
+  id            String   @id @default(uuid()) @db.Uuid
+  name          String   @db.VarChar(255)
+  contact_email String?  @db.VarChar(255)
+  created_at    DateTime @default(now()) @db.Timestamp(6)
+  updated_at    DateTime @updatedAt @db.Timestamp(6)
+
+  // Relations
+  creators Creator[]
+
+  @@map("agencies")
+}
+
+// Creator model for TikTok KOL
+model Creator {
+  id                 String   @id @default(uuid()) @db.Uuid
+  name               String   @db.VarChar(255)
+  tiktok_username    String   @unique @db.VarChar(255)
+  tiktok_profile_url String   @db.VarChar(500)
+  content_language   String?  @db.VarChar(100)
+  city               String?  @db.VarChar(100)
+  country            String?  @db.VarChar(100)
+  agency_id          String?  @db.Uuid
+  created_at         DateTime @default(now()) @db.Timestamp(6)
+  updated_at         DateTime @updatedAt @db.Timestamp(6)
+
+  // Relations
+  agency          Agency?         @relation(fields: [agency_id], references: [id], onDelete: SetNull)
+  creator_contact CreatorContact?
+  contact_unlocks ContactUnlock[]
+
+  @@index([tiktok_username])
+  @@index([agency_id])
+  @@map("creators")
+}
+
+// CreatorContact model for encrypted contact information
+model CreatorContact {
+  id                 String   @id @default(uuid()) @db.Uuid
+  creator_id         String   @unique @db.Uuid
+  email_encrypted    String?  @db.Text
+  whatsapp_encrypted String?  @db.Text
+  is_verified        Boolean  @default(false)
+  created_at         DateTime @default(now()) @db.Timestamp(6)
+  updated_at         DateTime @updatedAt @db.Timestamp(6)
+
+  // Relations
+  creator Creator @relation(fields: [creator_id], references: [id], onDelete: Cascade)
+
+  @@map("creator_contacts")
+}
+
+// ContactUnlock model for audit logging
+model ContactUnlock {
+  id          String   @id @default(uuid()) @db.Uuid
+  creator_id  String   @db.Uuid
+  user_id     String   @db.Uuid
+  unlocked_at DateTime @default(now()) @db.Timestamp(6)
+
+  // Relations
+  creator Creator @relation(fields: [creator_id], references: [id], onDelete: Restrict)
+  user    User    @relation(fields: [user_id], references: [id], onDelete: Restrict)
+
+  @@index([creator_id])
+  @@index([user_id])
+  @@map("contact_unlocks")
+}
+
+// ============================================
+// Enums
+// ============================================
+
+enum UserRole {
+  ADMIN
+  BRAND
+  AGENCY
+  CREATOR
+
+  @@map("user_role")
+}
