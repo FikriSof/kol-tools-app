@@ -3,6 +3,8 @@ import { userService } from "@/lib/services/user.service";
 import { handleApiError, successResponse } from "@/lib/api/error-handler";
 import { auth } from "@/lib/auth/auth";
 
+export const dynamic = "force-dynamic";
+
 /**
  * GET /api/users/[id]
  * Get user by ID
