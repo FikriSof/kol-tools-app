@@ -8,6 +8,6 @@ import prisma from "@/lib/db/prisma";
  * Configured with Prisma adapter for database sessions
  */
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  adapter: PrismaAdapter(prisma),
+  adapter: PrismaAdapter(prisma) as any,
   ...authConfig,
 });

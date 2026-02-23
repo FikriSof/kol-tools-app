@@ -1,5 +1,5 @@
-import HomeTemplate from "@/components/templates/HomeTemplate";
+import { redirect } from "next/navigation";
 
 export default function Home() {
-  return <HomeTemplate />;
+  redirect("/dashboard");
 }

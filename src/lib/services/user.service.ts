@@ -91,10 +91,10 @@ export class UserService extends BaseService {
       // Create user
       return userRepository.createUser({
         email: data.email,
-        name: data.name,
-        password: data.password, // In production, hash this first
-        image: data.image,
-      });
+        password_hash: data.password || "", // In production, hash this first
+        // name: data.name,
+        // image: data.image,
+      } as any);
     }, "Failed to create user");
   }
 
@@ -129,7 +129,12 @@ export class UserService extends BaseService {
       }
 
       // Update user
-      return userRepository.updateProfile(id, data);
+      const updateData: any = {};
+      if (data.email) updateData.email = data.email;
+      // if (data.name) updateData.name = data.name;
+      // if (data.image) updateData.image = data.image;
+
+      return userRepository.updateProfile(id, updateData);
     }, "Failed to update user");
   }
 

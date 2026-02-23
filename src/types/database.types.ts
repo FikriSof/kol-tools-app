@@ -3,7 +3,7 @@
  * Re-export Prisma types for use throughout the application
  */
 
-export type { User, Account, Session, UserRole } from "@prisma/client";
+export type { User, UserRole } from "@prisma/client";
 
 /**
  * User with relations
@@ -15,7 +15,7 @@ export interface UserWithAccounts {
   emailVerified: Date | null;
   image: string | null;
   role: string;
-  accounts: Account[];
+  accounts: any[];
   createdAt: Date;
   updatedAt: Date;
 }

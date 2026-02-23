@@ -32,7 +32,7 @@ export const authConfig: NextAuthConfig = {
           credentials.email as string,
         );
 
-        if (!user || !user.password) {
+        if (!user || !user.password_hash) {
           return null;
         }
 
@@ -43,7 +43,7 @@ export const authConfig: NextAuthConfig = {
         // );
 
         // For now, simple comparison (NOT SECURE - CHANGE IN PRODUCTION)
-        const isValid = credentials.password === user.password;
+        const isValid = credentials.password === user.password_hash;
 
         if (!isValid) {
           return null;
@@ -52,8 +52,8 @@ export const authConfig: NextAuthConfig = {
         return {
           id: user.id,
           email: user.email,
-          name: user.name,
-          image: user.image,
+          // name: user.name,
+          // image: user.image,
           role: user.role,
         };
       },
@@ -67,7 +67,7 @@ export const authConfig: NextAuthConfig = {
     async jwt({ token, user, trigger, session }) {
       // Initial sign in
       if (user) {
-        token.id = user.id;
+        token.id = user.id as string;
         token.role = (user as any).role;
       }
 

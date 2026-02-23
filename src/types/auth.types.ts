@@ -4,6 +4,7 @@
  */
 
 import type { DefaultSession } from "next-auth";
+import { JWT } from "next-auth/jwt";
 
 /**
  * Extend next-auth session type

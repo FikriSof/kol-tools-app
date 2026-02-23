@@ -27,10 +27,10 @@ export class UserRepository extends BaseRepository<User> {
   ): Promise<(User & { accounts: any[] }) | null> {
     return this.prisma.user.findUnique({
       where: { id },
-      include: {
-        accounts: true,
-      },
-    });
+      // include: {
+      //   accounts: true,
+      // },
+    }) as Promise<(User & { accounts: any[] }) | null>;
   }
 
   /**
@@ -45,10 +45,7 @@ export class UserRepository extends BaseRepository<User> {
   /**
    * Update user profile
    */
-  async updateProfile(
-    id: string,
-    data: Partial<Pick<User, "name" | "email" | "image">>,
-  ): Promise<User> {
+  async updateProfile(id: string, data: any): Promise<User> {
     return this.update(id, data);
   }
 
