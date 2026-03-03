@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { auth } from "@/lib/auth/auth";
-import { LogoutButton } from "@/components/dashboard/LogoutButton";
+import { LogoutButton } from "@/components/atoms/LogoutButton";
 
 function getInitials(name?: string | null, email?: string | null): string {
     if (name) {

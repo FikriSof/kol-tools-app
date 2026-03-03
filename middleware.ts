@@ -8,22 +8,30 @@ import { authConfig } from "@/lib/auth/auth.config";
  */
 const { auth } = NextAuth(authConfig);
 
+const protectedRoutes = [
+  "/dashboard",
+  "/creators",
+  "/unlock-history",
+  "/settings",
+];
+const authRoutes = ["/login", "/register"];
+
 export default auth((req) => {
   const isLoggedIn = !!req.auth;
   const { pathname } = req.nextUrl;
 
-  // Protect all /dashboard routes — redirect to login if not authenticated
-  if (pathname.startsWith("/dashboard") && !isLoggedIn) {
+  const isProtected = protectedRoutes.some((r) => pathname.startsWith(r));
+  const isAuthPage = authRoutes.some((r) => pathname.startsWith(r));
+
+  // Protect app routes — redirect to login if not authenticated
+  if (isProtected && !isLoggedIn) {
     const loginUrl = new URL("/login", req.url);
     loginUrl.searchParams.set("callbackUrl", pathname);
     return Response.redirect(loginUrl);
   }
 
   // Redirect already-logged-in users away from auth pages
-  if (
-    (pathname.startsWith("/login") || pathname.startsWith("/register")) &&
-    isLoggedIn
-  ) {
+  if (isAuthPage && isLoggedIn) {
     return Response.redirect(new URL("/dashboard", req.url));
   }
 

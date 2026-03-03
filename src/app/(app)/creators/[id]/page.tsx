@@ -20,11 +20,13 @@ import { notFound } from "next/navigation";
 export default async function CreatorDetailPage({
     params,
 }: {
-    params: { id: string };
+    params: Promise<{ id: string }>;
 }) {
+    const { id } = await params;
+
     let creator: Awaited<ReturnType<typeof creatorService.getCreatorById>>;
     try {
-        creator = await creatorService.getCreatorById(params.id);
+        creator = await creatorService.getCreatorById(id);
     } catch {
         notFound();
     }
@@ -43,9 +45,7 @@ export default async function CreatorDetailPage({
                     </Avatar>
                     <div className="space-y-1">
                         <h1 className="text-3xl font-bold text-slate-900">{creator.name}</h1>
-                        <p className="text-lg text-slate-500 font-medium">
-                            {creator.tiktok_username}
-                        </p>
+                        <p className="text-lg text-slate-500 font-medium">{creator.tiktok_username}</p>
                         <div className="flex items-center gap-4 text-sm text-slate-500 pt-2">
                             {location && (
                                 <div className="flex items-center gap-1.5">
@@ -128,10 +128,7 @@ export default async function CreatorDetailPage({
                                         <span className="font-mono text-slate-600 font-medium text-sm">
                                             Email: •••••••••@•••.com
                                         </span>
-                                        <Button
-                                            size="sm"
-                                            className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm border-0"
-                                        >
+                                        <Button size="sm" className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm border-0">
                                             Unlock
                                         </Button>
                                     </div>
@@ -141,10 +138,7 @@ export default async function CreatorDetailPage({
                                         <span className="font-mono text-slate-600 font-medium text-sm">
                                             WhatsApp: +62 ••• •••• ••••
                                         </span>
-                                        <Button
-                                            size="sm"
-                                            className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm border-0"
-                                        >
+                                        <Button size="sm" className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm border-0">
                                             Unlock
                                         </Button>
                                     </div>

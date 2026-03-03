@@ -1,9 +1,9 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth/auth";
-import { Sidebar } from "@/components/dashboard/Sidebar";
-import { Topbar } from "@/components/dashboard/Topbar";
+import { Sidebar } from "@/components/organisms/Sidebar";
+import { Topbar } from "@/components/organisms/Topbar";
 
-export default async function DashboardLayout({
+export default async function AppLayout({
     children,
 }: {
     children: React.ReactNode;

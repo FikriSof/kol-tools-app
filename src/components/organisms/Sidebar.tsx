@@ -19,17 +19,17 @@ const sidebarItems = [
     },
     {
         title: "Creators",
-        href: "/dashboard/creators",
+        href: "/creators",
         icon: Users,
     },
     {
         title: "Unlock History",
-        href: "/dashboard/unlock-history",
+        href: "/unlock-history",
         icon: History,
     },
     {
         title: "Settings",
-        href: "/dashboard/settings",
+        href: "/settings",
         icon: Settings,
     },
 ];

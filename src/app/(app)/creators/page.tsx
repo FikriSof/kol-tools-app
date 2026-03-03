@@ -11,16 +11,17 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Search } from "lucide-react";
 import { creatorService } from "@/lib/services/creator.service";
-import { AddCreatorDialog } from "@/components/dashboard/AddCreatorDialog";
-import { SearchInput } from "@/components/dashboard/SearchInput";
+import { AddCreatorDialog } from "@/components/molecules/AddCreatorDialog";
+import { SearchInput } from "@/components/atoms/SearchInput";
 
 interface PageProps {
-    searchParams: { page?: string; search?: string };
+    searchParams: Promise<{ page?: string; search?: string }>;
 }
 
 export default async function CreatorListingPage({ searchParams }: PageProps) {
-    const page = Number(searchParams.page) || 1;
-    const search = searchParams.search || undefined;
+    const params = await searchParams;
+    const page = Number(params.page) || 1;
+    const search = params.search || undefined;
 
     const { creators, total, pageSize } = await creatorService.getCreators({
         page,
@@ -33,10 +34,10 @@ export default async function CreatorListingPage({ searchParams }: PageProps) {
     const hasNext = page < totalPages;
 
     function buildHref(newPage: number, currentSearch?: string) {
-        const params = new URLSearchParams();
-        params.set("page", String(newPage));
-        if (currentSearch) params.set("search", currentSearch);
-        return `/dashboard/creators?${params.toString()}`;
+        const p = new URLSearchParams();
+        p.set("page", String(newPage));
+        if (currentSearch) p.set("search", currentSearch);
+        return `/creators?${p.toString()}`;
     }
 
     return (
@@ -45,9 +46,7 @@ export default async function CreatorListingPage({ searchParams }: PageProps) {
                 <h1 className="text-2xl font-bold tracking-tight text-slate-900">
                     Creators
                     {total > 0 && (
-                        <span className="ml-2 text-sm font-normal text-slate-400">
-                            ({total})
-                        </span>
+                        <span className="ml-2 text-sm font-normal text-slate-400">({total})</span>
                     )}
                 </h1>
                 <AddCreatorDialog />
@@ -103,19 +102,15 @@ export default async function CreatorListingPage({ searchParams }: PageProps) {
                                                 <span className="text-slate-900 font-medium">{creator.name}</span>
                                             </div>
                                         </TableCell>
-                                        <TableCell className="text-slate-600">
-                                            {creator.tiktok_username}
-                                        </TableCell>
+                                        <TableCell className="text-slate-600">{creator.tiktok_username}</TableCell>
                                         <TableCell className="text-slate-600">
                                             {location || <span className="text-slate-400 italic">—</span>}
                                         </TableCell>
                                         <TableCell className="text-slate-600">
-                                            {creator.agency?.name || (
-                                                <span className="text-slate-400 italic">—</span>
-                                            )}
+                                            {creator.agency?.name || <span className="text-slate-400 italic">—</span>}
                                         </TableCell>
                                         <TableCell className="text-right">
-                                            <Link href={`/dashboard/creators/${creator.id}`}>
+                                            <Link href={`/creators/${creator.id}`}>
                                                 <Button
                                                     variant="ghost"
                                                     size="sm"

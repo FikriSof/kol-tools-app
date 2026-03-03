@@ -20,9 +20,7 @@ export default function DashboardPage() {
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-bold text-slate-900">1,234</div>
-                        <p className="text-xs text-slate-500">
-                            +20.1% from last month
-                        </p>
+                        <p className="text-xs text-slate-500">+20.1% from last month</p>
                     </CardContent>
                 </Card>
                 <Card className="border-slate-200 shadow-sm">
@@ -32,23 +30,17 @@ export default function DashboardPage() {
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-bold text-slate-900">425</div>
-                        <p className="text-xs text-slate-500">
-                            +15% from last month
-                        </p>
+                        <p className="text-xs text-slate-500">+15% from last month</p>
                     </CardContent>
                 </Card>
                 <Card className="border-slate-200 shadow-sm">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium text-slate-500">
-                            This Month Unlocks
-                        </CardTitle>
+                        <CardTitle className="text-sm font-medium text-slate-500">This Month Unlocks</CardTitle>
                         <TrendingUp className="h-4 w-4 text-slate-400" />
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-bold text-slate-900">89</div>
-                        <p className="text-xs text-slate-500">
-                            +7% from last week
-                        </p>
+                        <p className="text-xs text-slate-500">+7% from last week</p>
                     </CardContent>
                 </Card>
             </div>
@@ -69,37 +61,17 @@ export default function DashboardPage() {
                         </TableHeader>
                         <TableBody>
                             {[
-                                {
-                                    creator: "Alice Smith",
-                                    platform: "TikTok",
-                                    date: "2024-02-14",
-                                },
-                                {
-                                    creator: "Bob Jones",
-                                    platform: "Instagram",
-                                    date: "2024-02-13",
-                                },
-                                {
-                                    creator: "Charlie Brown",
-                                    platform: "TikTok",
-                                    date: "2024-02-13",
-                                },
-                                {
-                                    creator: "Diana Prince",
-                                    platform: "YouTube",
-                                    date: "2024-02-12",
-                                },
+                                { creator: "Alice Smith", platform: "TikTok", date: "2024-02-14" },
+                                { creator: "Bob Jones", platform: "Instagram", date: "2024-02-13" },
+                                { creator: "Charlie Brown", platform: "TikTok", date: "2024-02-13" },
+                                { creator: "Diana Prince", platform: "YouTube", date: "2024-02-12" },
                             ].map((activity) => (
                                 <TableRow key={`${activity.creator}-${activity.platform}-${activity.date}`} className="hover:bg-slate-50 border-slate-200">
-                                    <TableCell className="font-medium text-slate-900">
-                                        {activity.creator}
-                                    </TableCell>
+                                    <TableCell className="font-medium text-slate-900">{activity.creator}</TableCell>
                                     <TableCell className="text-slate-600">{activity.platform}</TableCell>
                                     <TableCell className="text-slate-600">{activity.date}</TableCell>
                                     <TableCell className="text-right">
-                                        <span className="text-indigo-600 hover:text-indigo-700 font-medium cursor-pointer text-sm">
-                                            View
-                                        </span>
+                                        <span className="text-indigo-600 hover:text-indigo-700 font-medium cursor-pointer text-sm">View</span>
                                     </TableCell>
                                 </TableRow>
                             ))}

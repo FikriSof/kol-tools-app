@@ -11,38 +11,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function UnlockHistoryPage() {
     const history = [
-        {
-            id: 1,
-            creator: { name: "Alice Smith", avatar: "/avatars/1.png" },
-            platform: "TikTok",
-            date: "2024-02-14 10:30 AM",
-            cost: 5,
-            status: "Success",
-        },
-        {
-            id: 2,
-            creator: { name: "Bob Jones", avatar: "/avatars/2.png" },
-            platform: "Instagram",
-            date: "2024-02-13 02:15 PM",
-            cost: 5,
-            status: "Success",
-        },
-        {
-            id: 3,
-            creator: { name: "Charlie Brown", avatar: "/avatars/3.png" },
-            platform: "TikTok",
-            date: "2024-02-13 09:00 AM",
-            cost: 5,
-            status: "Success",
-        },
-        {
-            id: 4,
-            creator: { name: "Diana Prince", avatar: "/avatars/4.png" },
-            platform: "YouTube",
-            date: "2024-02-12 04:45 PM",
-            cost: 10,
-            status: "Success",
-        },
+        { id: 1, creator: { name: "Alice Smith", avatar: "/avatars/1.png" }, platform: "TikTok", date: "2024-02-14 10:30 AM", cost: 5, status: "Success" },
+        { id: 2, creator: { name: "Bob Jones", avatar: "/avatars/2.png" }, platform: "Instagram", date: "2024-02-13 02:15 PM", cost: 5, status: "Success" },
+        { id: 3, creator: { name: "Charlie Brown", avatar: "/avatars/3.png" }, platform: "TikTok", date: "2024-02-13 09:00 AM", cost: 5, status: "Success" },
+        { id: 4, creator: { name: "Diana Prince", avatar: "/avatars/4.png" }, platform: "YouTube", date: "2024-02-12 04:45 PM", cost: 10, status: "Success" },
     ];
 
     return (
