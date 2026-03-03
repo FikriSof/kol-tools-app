@@ -1,19 +1,11 @@
-import { redirect } from "next/navigation";
-import { auth } from "@/lib/auth/auth";
 import { Sidebar } from "@/components/organisms/Sidebar";
 import { Topbar } from "@/components/organisms/Topbar";
 
-export default async function AppLayout({
+export default function AppLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
-    const session = await auth();
-
-    if (!session?.user) {
-        redirect("/login");
-    }
-
     return (
         <div className="flex min-h-screen bg-[#F6F7FB]">
             <Sidebar />

@@ -1,11 +1,7 @@
 import NextAuth from "next-auth";
 import { authEdgeConfig } from "@/lib/auth/auth.edge.config";
+import { NextResponse } from "next/server";
 
-/**
- * Middleware uses authEdgeConfig — NO Prisma, NO Node.js modules.
- * Edge runtime cannot run Prisma/userRepository.
- * JWT is read from cookie without touching the database.
- */
 const { auth } = NextAuth(authEdgeConfig);
 
 const protectedRoutes = [
@@ -27,15 +23,15 @@ export default auth((req) => {
   if (isProtected && !isLoggedIn) {
     const loginUrl = new URL("/login", req.url);
     loginUrl.searchParams.set("callbackUrl", pathname);
-    return Response.redirect(loginUrl);
+    return NextResponse.redirect(loginUrl);
   }
 
   // Redirect already-logged-in users away from auth pages
   if (isAuthPage && isLoggedIn) {
-    return Response.redirect(new URL("/dashboard", req.url));
+    return NextResponse.redirect(new URL("/dashboard", req.url));
   }
 
-  return undefined;
+  return NextResponse.next();
 });
 
 export const config = {
