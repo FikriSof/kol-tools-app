@@ -10,8 +10,24 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { auth } from "@/lib/auth/auth";
+import { LogoutButton } from "@/components/dashboard/LogoutButton";
 
-export function Topbar() {
+function getInitials(name?: string | null, email?: string | null): string {
+    if (name) {
+        const parts = name.trim().split(" ");
+        if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
+        return parts[0].slice(0, 2).toUpperCase();
+    }
+    if (email) return email.slice(0, 2).toUpperCase();
+    return "??";
+}
+
+export async function Topbar() {
+    const session = await auth();
+    const user = session?.user;
+    const initials = getInitials(user?.name, user?.email);
+
     return (
         <header className="flex h-16 items-center justify-between border-b border-slate-200 bg-white px-6">
             <div className="flex items-center gap-4 w-1/3">
@@ -33,17 +49,21 @@ export function Topbar() {
                     <DropdownMenuTrigger asChild>
                         <Button variant="ghost" className="relative h-9 w-9 rounded-full ring-2 ring-transparent hover:ring-indigo-100">
                             <Avatar className="h-9 w-9 border border-slate-200">
-                                <AvatarImage src="/avatars/01.png" alt="@shadcn" />
-                                <AvatarFallback>JD</AvatarFallback>
+                                <AvatarImage src={user?.image ?? undefined} alt={user?.name ?? "User"} />
+                                <AvatarFallback className="bg-indigo-50 text-indigo-700 text-sm font-semibold">
+                                    {initials}
+                                </AvatarFallback>
                             </Avatar>
                         </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-56 border-slate-200" align="end" forceMount>
+                    <DropdownMenuContent className="w-56 border-slate-200 bg-white" align="end" forceMount>
                         <DropdownMenuLabel className="font-normal">
                             <div className="flex flex-col space-y-1">
-                                <p className="text-sm font-semibold leading-none text-slate-900">John Doe</p>
+                                <p className="text-sm font-semibold leading-none text-slate-900">
+                                    {user?.name ?? "User"}
+                                </p>
                                 <p className="text-xs leading-none text-slate-500">
-                                    m@example.com
+                                    {user?.email ?? ""}
                                 </p>
                             </div>
                         </DropdownMenuLabel>
@@ -51,7 +71,7 @@ export function Topbar() {
                         <DropdownMenuItem className="text-slate-700 focus:bg-slate-50 focus:text-indigo-600">Profile</DropdownMenuItem>
                         <DropdownMenuItem className="text-slate-700 focus:bg-slate-50 focus:text-indigo-600">Settings</DropdownMenuItem>
                         <DropdownMenuSeparator className="bg-slate-100" />
-                        <DropdownMenuItem className="text-red-600 focus:bg-red-50 focus:text-red-700">Log out</DropdownMenuItem>
+                        <LogoutButton />
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>

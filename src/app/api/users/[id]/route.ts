@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 import { userService } from "@/lib/services/user.service";
 import { handleApiError, successResponse } from "@/lib/api/error-handler";
 import { auth } from "@/lib/auth/auth";
+import { UnauthorizedError } from "@/lib/utils/errors";
 
 export const dynamic = "force-dynamic";
 
@@ -16,7 +17,7 @@ export async function GET(
   try {
     const session = await auth();
     if (!session?.user) {
-      return handleApiError(new Error("Unauthorized"));
+      return handleApiError(new UnauthorizedError());
     }
 
     const { id } = await params;
@@ -39,7 +40,7 @@ export async function PATCH(
   try {
     const session = await auth();
     if (!session?.user) {
-      return handleApiError(new Error("Unauthorized"));
+      return handleApiError(new UnauthorizedError());
     }
 
     const { id } = await params;
@@ -68,7 +69,7 @@ export async function DELETE(
   try {
     const session = await auth();
     if (!session?.user) {
-      return handleApiError(new Error("Unauthorized"));
+      return handleApiError(new UnauthorizedError());
     }
 
     const { id } = await params;

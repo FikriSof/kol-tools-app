@@ -1,16 +1,15 @@
-import { NextRequest } from "next/server";
-import { userService } from "@/lib/services/user.service";
+import type { NextRequest } from "next/server";
+import { creatorService } from "@/lib/services/creator.service";
 import { handleApiError, successResponse } from "@/lib/api/error-handler";
 import { auth } from "@/lib/auth/auth";
 import { UnauthorizedError } from "@/lib/utils/errors";
 
 /**
- * GET /api/users
- * Get paginated list of users
+ * GET /api/creators
+ * Get paginated list of creators with optional search
  */
 export async function GET(request: NextRequest) {
   try {
-    // Check authentication
     const session = await auth();
     if (!session?.user) {
       return handleApiError(new UnauthorizedError());
@@ -19,9 +18,9 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const page = Number.parseInt(searchParams.get("page") || "1");
     const pageSize = Number.parseInt(searchParams.get("pageSize") || "10");
-    const role = searchParams.get("role") || undefined;
+    const search = searchParams.get("search") || undefined;
 
-    const result = await userService.getUsers({ page, pageSize, role });
+    const result = await creatorService.getCreators({ page, pageSize, search });
 
     return successResponse(result);
   } catch (error) {
@@ -30,21 +29,29 @@ export async function GET(request: NextRequest) {
 }
 
 /**
- * POST /api/users
- * Create a new user
+ * POST /api/creators
+ * Create a new creator
  */
 export async function POST(request: NextRequest) {
   try {
+    const session = await auth();
+    if (!session?.user) {
+      return handleApiError(new UnauthorizedError());
+    }
+
     const body = await request.json();
 
-    const user = await userService.createUser({
-      email: body.email,
+    const creator = await creatorService.createCreator({
       name: body.name,
-      password: body.password,
-      image: body.image,
+      tiktok_username: body.tiktok_username,
+      tiktok_profile_url: body.tiktok_profile_url,
+      city: body.city,
+      country: body.country,
+      content_language: body.content_language,
+      agency_id: body.agency_id,
     });
 
-    return successResponse(user, 201);
+    return successResponse(creator, 201);
   } catch (error) {
     return handleApiError(error);
   }

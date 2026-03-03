@@ -6,77 +6,113 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-    Mail,
-    Phone,
     MapPin,
     Building,
-    Unlock,
+    ExternalLink,
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { creatorService } from "@/lib/services/creator.service";
+import Link from "next/link";
+import { notFound } from "next/navigation";
 
-export default function CreatorDetailPage({
+export default async function CreatorDetailPage({
     params,
 }: {
     params: { id: string };
 }) {
-    const creator = {
-        id: params.id,
-        name: "Alice Smith",
-        username: "@alicesmith",
-        location: "New York, USA",
-        agency: "Creative Agency",
-        email: "a***@example.com",
-        phone: "+1 555 *** **88",
-        avatar: "/avatars/1.png",
-    };
+    let creator: Awaited<ReturnType<typeof creatorService.getCreatorById>>;
+    try {
+        creator = await creatorService.getCreatorById(params.id);
+    } catch {
+        notFound();
+    }
+
+    const location = [creator.city, creator.country].filter(Boolean).join(", ");
 
     return (
         <div className="space-y-6">
+            {/* Header */}
             <div className="flex items-start justify-between">
                 <div className="flex items-center gap-6">
                     <Avatar className="h-24 w-24 border-4 border-white shadow-sm ring-1 ring-slate-200">
-                        <AvatarImage src={creator.avatar} />
-                        <AvatarFallback className="bg-slate-100 text-slate-500 text-3xl font-bold">{creator.name.charAt(0)}</AvatarFallback>
+                        <AvatarFallback className="bg-slate-100 text-slate-500 text-3xl font-bold">
+                            {creator.name.charAt(0).toUpperCase()}
+                        </AvatarFallback>
                     </Avatar>
                     <div className="space-y-1">
                         <h1 className="text-3xl font-bold text-slate-900">{creator.name}</h1>
-                        <p className="text-lg text-slate-500 font-medium">{creator.username}</p>
+                        <p className="text-lg text-slate-500 font-medium">
+                            {creator.tiktok_username}
+                        </p>
                         <div className="flex items-center gap-4 text-sm text-slate-500 pt-2">
-                            <div className="flex items-center gap-1.5">
-                                <MapPin className="h-4 w-4 text-slate-400" />
-                                {creator.location}
-                            </div>
-                            <div className="flex items-center gap-1.5">
-                                <Building className="h-4 w-4 text-slate-400" />
-                                {creator.agency}
-                            </div>
+                            {location && (
+                                <div className="flex items-center gap-1.5">
+                                    <MapPin className="h-4 w-4 text-slate-400" />
+                                    {location}
+                                </div>
+                            )}
+                            {creator.agency && (
+                                <div className="flex items-center gap-1.5">
+                                    <Building className="h-4 w-4 text-slate-400" />
+                                    {creator.agency.name}
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
+                <Link href={creator.tiktok_profile_url} target="_blank" rel="noopener noreferrer">
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        className="gap-2 border-slate-200 text-slate-700 hover:bg-slate-50 bg-white"
+                    >
+                        <ExternalLink className="h-4 w-4" />
+                        View TikTok
+                    </Button>
+                </Link>
             </div>
 
             <Separator className="bg-slate-200" />
 
+            {/* Info cards */}
             <div className="grid gap-6 md:grid-cols-2">
+                {/* Creator Info */}
+                <Card className="border-slate-200 shadow-sm rounded-xl">
+                    <CardHeader>
+                        <CardTitle className="text-slate-900">Creator Info</CardTitle>
+                        <CardDescription className="text-slate-500">
+                            Profile details for this creator
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-3 text-sm">
+                        <div className="flex justify-between border-b border-slate-100 pb-2">
+                            <span className="text-slate-500">TikTok Username</span>
+                            <span className="text-slate-900 font-medium">{creator.tiktok_username}</span>
+                        </div>
+                        {creator.content_language && (
+                            <div className="flex justify-between border-b border-slate-100 pb-2">
+                                <span className="text-slate-500">Content Language</span>
+                                <span className="text-slate-900 font-medium">{creator.content_language}</span>
+                            </div>
+                        )}
+                        <div className="flex justify-between border-b border-slate-100 pb-2">
+                            <span className="text-slate-500">City</span>
+                            <span className="text-slate-900 font-medium">{creator.city || "—"}</span>
+                        </div>
+                        <div className="flex justify-between border-b border-slate-100 pb-2">
+                            <span className="text-slate-500">Country</span>
+                            <span className="text-slate-900 font-medium">{creator.country || "—"}</span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span className="text-slate-500">Agency</span>
+                            <span className="text-slate-900 font-medium">{creator.agency?.name || "—"}</span>
+                        </div>
+                    </CardContent>
+                </Card>
+
+                {/* Contact Information */}
                 <Card className="border-slate-200 shadow-sm rounded-xl">
                     <CardHeader>
                         <CardTitle className="text-slate-900">Contact Information</CardTitle>
@@ -85,78 +121,40 @@ export default function CreatorDetailPage({
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                        <div className="flex items-center justify-between p-4 border border-slate-200 rounded-lg bg-slate-50">
-                            <div className="flex items-center gap-3">
-                                <Mail className="h-5 w-5 text-slate-400" />
-                                <span className="font-mono text-slate-600 font-medium">{creator.email}</span>
-                            </div>
-                            <Dialog>
-                                <DialogTrigger asChild>
-                                    <Button size="sm" className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm border-0">
-                                        <Unlock className="h-4 w-4 mr-2" />
-                                        Unlock
-                                    </Button>
-                                </DialogTrigger>
-                                <DialogContent className="border-slate-200 bg-white">
-                                    <DialogHeader>
-                                        <DialogTitle className="text-slate-900">Unlock Contact Information</DialogTitle>
-                                        <DialogDescription className="text-slate-500">
-                                            Are you sure you want to unlock contact details for{" "}
-                                            <span className="font-semibold text-slate-900">
-                                                {creator.name}
-                                            </span>
-                                            ? This action will be logged.
-                                        </DialogDescription>
-                                    </DialogHeader>
-                                    <div className="py-4">
-                                        <div className="flex items-center p-4 bg-indigo-50 border border-indigo-100 rounded-md">
-                                            <span className="text-sm text-indigo-900">
-                                                Balance after unlock: <strong className="font-semibold text-indigo-700">95 Credits</strong>
-                                            </span>
-                                        </div>
+                        {creator.creator_contact ? (
+                            <>
+                                {creator.creator_contact.email_encrypted && (
+                                    <div className="flex items-center justify-between p-4 border border-slate-200 rounded-lg bg-slate-50">
+                                        <span className="font-mono text-slate-600 font-medium text-sm">
+                                            Email: •••••••••@•••.com
+                                        </span>
+                                        <Button
+                                            size="sm"
+                                            className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm border-0"
+                                        >
+                                            Unlock
+                                        </Button>
                                     </div>
-                                    <DialogFooter>
-                                        <Button variant="outline" className="border-slate-200 text-slate-700 bg-white hover:bg-slate-50">Cancel</Button>
-                                        <Button className="bg-indigo-600 hover:bg-indigo-700 text-white">Confirm Unlock</Button>
-                                    </DialogFooter>
-                                </DialogContent>
-                            </Dialog>
-                        </div>
-                        <div className="flex items-center justify-between p-4 border border-slate-200 rounded-lg bg-slate-50">
-                            <div className="flex items-center gap-3">
-                                <Phone className="h-5 w-5 text-slate-400" />
-                                <span className="font-mono text-slate-600 font-medium">{creator.phone}</span>
-                            </div>
-                            <Button size="sm" variant="secondary" disabled className="bg-slate-200 text-slate-400 opacity-50">
-                                <Unlock className="h-4 w-4 mr-2" />
-                                Unlock
-                            </Button>
-                        </div>
-                    </CardContent>
-                </Card>
-
-                <Card className="border-slate-200 shadow-sm rounded-xl overflow-hidden">
-                    <CardHeader className="bg-white border-b border-slate-100">
-                        <CardTitle className="text-slate-900">Unlock History</CardTitle>
-                        <CardDescription className="text-slate-500">
-                            Recent unlocks for this creator
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent className="p-0">
-                        <Table>
-                            <TableHeader className="bg-slate-50">
-                                <TableRow className="border-slate-200 hover:bg-slate-50">
-                                    <TableHead className="text-slate-500 font-medium pl-6">User</TableHead>
-                                    <TableHead className="text-slate-500 font-medium">Date</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                <TableRow className="border-slate-100 hover:bg-slate-50">
-                                    <TableCell className="font-medium text-slate-900 pl-6">John Doe</TableCell>
-                                    <TableCell className="text-slate-600">2024-01-15 14:30</TableCell>
-                                </TableRow>
-                            </TableBody>
-                        </Table>
+                                )}
+                                {creator.creator_contact.whatsapp_encrypted && (
+                                    <div className="flex items-center justify-between p-4 border border-slate-200 rounded-lg bg-slate-50">
+                                        <span className="font-mono text-slate-600 font-medium text-sm">
+                                            WhatsApp: +62 ••• •••• ••••
+                                        </span>
+                                        <Button
+                                            size="sm"
+                                            className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm border-0"
+                                        >
+                                            Unlock
+                                        </Button>
+                                    </div>
+                                )}
+                            </>
+                        ) : (
+                            <p className="text-sm text-slate-400 italic">
+                                No contact information registered yet.
+                            </p>
+                        )}
                     </CardContent>
                 </Card>
             </div>
