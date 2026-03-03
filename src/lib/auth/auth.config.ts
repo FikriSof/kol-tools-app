@@ -65,18 +65,14 @@ export const authConfig: NextAuthConfig = {
      * JWT callback - runs when JWT is created or updated
      */
     async jwt({ token, user, trigger, session }) {
-      // Initial sign in
       if (user) {
         token.id = user.id as string;
-        token.role = (user as any).role;
+        token.role = (user as { role?: string }).role as string;
       }
-
-      // Update session
       if (trigger === "update" && session) {
         token.name = session.name;
         token.email = session.email;
       }
-
       return token;
     },
 
@@ -90,30 +86,8 @@ export const authConfig: NextAuthConfig = {
       }
       return session;
     },
-
-    /**
-     * Authorized callback - protects routes
-     */
-    authorized({ auth, request: { nextUrl } }) {
-      const isLoggedIn = !!auth?.user;
-      const isOnDashboard = nextUrl.pathname.startsWith("/dashboard");
-      const isOnAuth =
-        nextUrl.pathname.startsWith("/login") ||
-        nextUrl.pathname.startsWith("/register");
-
-      if (isOnDashboard) {
-        if (isLoggedIn) return true;
-        return false; // Redirect to login
-      }
-
-      if (isOnAuth) {
-        if (isLoggedIn)
-          return Response.redirect(new URL("/dashboard", nextUrl));
-        return true;
-      }
-
-      return true;
-    },
+    // NOTE: Route protection is handled by middleware.ts + layout guards.
+    // Do NOT add an authorized() callback here — it causes redirect loops.
   },
 
   pages: {

@@ -1,12 +1,12 @@
 import NextAuth from "next-auth";
-import { authConfig } from "@/lib/auth/auth.config";
+import { authEdgeConfig } from "@/lib/auth/auth.edge.config";
 
 /**
- * Middleware uses NextAuth with authConfig only (no PrismaAdapter).
- * Edge runtime does not support Prisma/Node.js modules.
- * JWT strategy reads from cookie without hitting the database.
+ * Middleware uses authEdgeConfig — NO Prisma, NO Node.js modules.
+ * Edge runtime cannot run Prisma/userRepository.
+ * JWT is read from cookie without touching the database.
  */
-const { auth } = NextAuth(authConfig);
+const { auth } = NextAuth(authEdgeConfig);
 
 const protectedRoutes = [
   "/dashboard",
