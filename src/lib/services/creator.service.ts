@@ -1,7 +1,7 @@
 import type { Creator } from "@prisma/client";
-import { BaseService } from "@/lib/services/base.service";
 import { creatorRepository } from "@/lib/db/repositories/creator.repository";
-import { NotFoundError, ConflictError } from "@/lib/utils/errors";
+import { BaseService } from "@/lib/services/base.service";
+import { ConflictError, NotFoundError } from "@/lib/utils/errors";
 
 /**
  * Creator Service
