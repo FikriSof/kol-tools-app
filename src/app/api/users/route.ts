@@ -1,7 +1,7 @@
-import { NextRequest } from "next/server";
-import { userService } from "@/lib/services/user.service";
+import type { NextRequest } from "next/server";
 import { handleApiError, successResponse } from "@/lib/api/error-handler";
 import { auth } from "@/lib/auth/auth";
+import { userService } from "@/lib/services/user.service";
 import { UnauthorizedError } from "@/lib/utils/errors";
 
 /**

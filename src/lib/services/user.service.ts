@@ -1,9 +1,9 @@
 import type { User } from "@prisma/client";
-import { BaseService } from "@/lib/services/base.service";
 import { userRepository } from "@/lib/db/repositories/user.repository";
+import { BaseService } from "@/lib/services/base.service";
 import {
-  NotFoundError,
   ConflictError,
+  NotFoundError,
   ValidationError,
 } from "@/lib/utils/errors";
 

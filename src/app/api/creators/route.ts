@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
-import { creatorService } from "@/lib/services/creator.service";
 import { handleApiError, successResponse } from "@/lib/api/error-handler";
 import { auth } from "@/lib/auth/auth";
+import { creatorService } from "@/lib/services/creator.service";
 import { UnauthorizedError } from "@/lib/utils/errors";
 
 /**

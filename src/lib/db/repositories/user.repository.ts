@@ -1,6 +1,6 @@
-import type { User, Prisma } from "@prisma/client";
-import { BaseRepository } from "@/lib/db/repositories/base.repository";
+import type { Prisma, User } from "@prisma/client";
 import prisma from "@/lib/db/prisma";
+import { BaseRepository } from "@/lib/db/repositories/base.repository";
 
 /**
  * User Repository

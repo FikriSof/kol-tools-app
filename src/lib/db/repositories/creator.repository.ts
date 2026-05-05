@@ -1,6 +1,6 @@
 import type { Creator, Prisma } from "@prisma/client";
-import { BaseRepository } from "@/lib/db/repositories/base.repository";
 import prisma from "@/lib/db/prisma";
+import { BaseRepository } from "@/lib/db/repositories/base.repository";
 
 /**
  * Creator Repository
