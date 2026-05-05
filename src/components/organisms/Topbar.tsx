@@ -29,28 +29,28 @@ export async function Topbar() {
     const initials = getInitials(user?.name, user?.email);
 
     return (
-        <header className="flex h-16 items-center justify-between border-b border-slate-200 bg-white px-6">
-            <div className="flex items-center gap-4 w-1/3">
-                <div className="relative w-full max-w-md">
-                    <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+        <header className="flex h-20 items-center justify-between border-b border-slate-200 bg-white px-8">
+            <div className="flex items-center w-1/2">
+                <div className="relative w-full max-w-[320px]">
+                    <Search className="absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
                     <Input
                         type="search"
-                        placeholder="Search..."
-                        className="w-full pl-9 bg-slate-50 border-slate-200 focus:bg-white focus:ring-indigo-500/20 text-black"
+                        placeholder="Search creators, unlocks..."
+                        className="w-full h-[40px] pl-10 bg-[#f8fafc] border-transparent focus:bg-white focus:border-slate-200 focus:ring-1 focus:ring-slate-200 text-[14px] text-slate-700 placeholder:text-slate-400 rounded-lg shadow-none"
                     />
                 </div>
             </div>
-            <div className="flex items-center gap-4">
-                <Button variant="ghost" size="icon" className="relative text-slate-500 hover:text-slate-700 hover:bg-slate-50">
+            <div className="flex items-center gap-5">
+                <Button variant="ghost" size="icon" className="relative text-slate-500 hover:text-slate-700 hover:bg-slate-50 h-10 w-10 rounded-full">
                     <Bell className="h-5 w-5" />
-                    <span className="absolute top-2.5 right-2.5 h-2 w-2 rounded-full bg-red-500 border-2 border-white" />
+                    <span className="absolute top-2 right-2.5 h-[6px] w-[6px] rounded-full bg-red-500 border-[1px] border-white" />
                 </Button>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="relative h-9 w-9 rounded-full ring-2 ring-transparent hover:ring-indigo-100">
-                            <Avatar className="h-9 w-9 border border-slate-200">
-                                <AvatarImage src={user?.image ?? undefined} alt={user?.name ?? "User"} />
-                                <AvatarFallback className="bg-indigo-50 text-indigo-700 text-sm font-semibold">
+                        <Button variant="ghost" className="relative h-10 w-10 rounded-full ring-2 ring-transparent hover:ring-indigo-100 p-0 overflow-hidden bg-slate-900 border border-slate-800 shadow-sm">
+                            <Avatar className="h-full w-full rounded-none">
+                                <AvatarImage src={user?.image ?? "https://i.pravatar.cc/150?u=a042581f4e29026704d"} alt={user?.name ?? "User"} className="object-cover opacity-100" />
+                                <AvatarFallback className="bg-slate-800 text-slate-300 text-sm font-semibold rounded-none">
                                     {initials}
                                 </AvatarFallback>
                             </Avatar>
