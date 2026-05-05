@@ -8,6 +8,7 @@ import { userRepository } from "@/lib/db/repositories/user.repository";
  * Defines authentication providers and callbacks
  */
 export const authConfig: NextAuthConfig = {
+  trustHost: true,
   providers: [
     // Google OAuth Provider
     ...(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
